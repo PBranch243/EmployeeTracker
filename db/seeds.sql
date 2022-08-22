@@ -1,4 +1,22 @@
-INSERT INTO employees (first_name, last_name, role_id, manager_id)
+INSERT INTO department (name)
+VALUES
+  ('Human Resources'),
+  ('Production'),
+  ('Shipping/Receiving'),
+  ('Sales');
+
+INSERT INTO roll (title, salary, department_id)
+VALUES
+  ('HR Supervisor', 100000, 1),
+  ('Shop Foreman', 100000, 2),
+  ('Supervisor', 100000, 3),
+  ('Sales Manager', 100000, 4),
+  ('Dockworker', 40000, 3),
+  ('Salesperson', 80000, 4),
+  ('Office worker', 55000, 1),
+  ('Production worker', 50000, 2);
+
+INSERT INTO employees (first_name, last_name, roll_id, manager_id)
 VALUES
   ('Ronald', 'Firbank', 1, NULL),
   ('Virginia', 'Woolf', 1, NULL),
