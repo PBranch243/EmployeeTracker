@@ -61,6 +61,22 @@ function allDept(){
     });
 };
 
+// function to add department.  pass info from inquirer prompt into 'name'
+function addDept(){
+    const name = `newDepartment`;
+    const sql = `INSERT INTO department (name) VALUES (?);`;
+    
+    db.query(sql, name, (err, result)=>{
+        if (err) {
+            console.log(err);
+            return;
+          }
+          console.log(result);
+          allDept();
+    });
+};
+
+// addDept();
 // allEmployees();
 // allRolls();
 // allDept();
