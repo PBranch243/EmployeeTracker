@@ -37,11 +37,11 @@ LEFT JOIN department ON roll.department_id = department.id;`
 
 };
 
-function allRolls(){
-    const rollQuery= `SELECT roll.id, roll.title, department.name AS department, roll.salary
+function allRolls() {
+    const rollQuery = `SELECT roll.id, roll.title, department.name AS department, roll.salary
     FROM roll
     LEFT JOIN department ON roll.department_id = department.id;`;
-    db.query(rollQuery, (err,rows)=>{
+    db.query(rollQuery, (err, rows) => {
         if (err) {
             console.log(err);
         }
@@ -50,9 +50,9 @@ function allRolls(){
     });
 };
 
-function allDept(){
-    const deptQuery= `SELECT * FROM department;`;
-    db.query(deptQuery, (err,rows)=>{
+function allDept() {
+    const deptQuery = `SELECT * FROM department;`;
+    db.query(deptQuery, (err, rows) => {
         if (err) {
             console.log(err);
         }
@@ -62,49 +62,64 @@ function allDept(){
 };
 
 // function to add department.  pass info from inquirer prompt into 'name'
-function addDept(){
+function addDept() {
     const name = `newDepartment`;
     const sql = `INSERT INTO department (name) VALUES (?);`;
-    
-    db.query(sql, name, (err, result)=>{
+
+    db.query(sql, name, (err, result) => {
         if (err) {
             console.log(err);
             return;
-          }
-          console.log(result);
-          allDept();
+        }
+        console.log(result);
+        allDept();
     });
 };
 
-function addRoll(){
+function addRoll() {
     const params = ['newTitle', 1, 5];
     const rollsql = `INSERT INTO roll (title, salary, department_id) VALUES (?,?,?);`;
-    
-    db.query(rollsql, params, (err, result)=>{
+
+    db.query(rollsql, params, (err, result) => {
         if (err) {
             console.log(err);
             return;
-          }
-          console.log(result);
-          allRolls();
+        }
+        console.log(result);
+        allRolls();
     });
 };
 
 
-function addEmployee(){
+function addEmployee() {
     const params = ['newFirst', 'newLast', null, null];
     const empsql = `INSERT INTO employees (first_name, last_name, roll_id, manager_id) VALUES (?,?,?,?);`;
-    
-    db.query(empsql, params, (err, result)=>{
+
+    db.query(empsql, params, (err, result) => {
         if (err) {
             console.log(err);
             return;
-          }
-          console.log(result);
-          allEmployees();
+        }
+        console.log(result);
+        allEmployees();
     });
 };
 
+function updateEmployeeRoll() {
+    const sql = `UPDATE employees SET roll_id = ? 
+               WHERE id = ?`;
+    const params = [1, 6];
+    db.query(sql, params, (err, result) => {
+        if (err) {
+            console.log(err);
+            return;
+        }
+        console.log(result);
+        allEmployees();
+    });
+};
+
+updateEmployeeRoll();
 // addEmployee();
 // addRoll();
 // addDept();
