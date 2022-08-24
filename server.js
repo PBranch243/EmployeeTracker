@@ -76,6 +76,37 @@ function addDept(){
     });
 };
 
+function addRoll(){
+    const params = ['newTitle', 1, 5];
+    const rollsql = `INSERT INTO roll (title, salary, department_id) VALUES (?,?,?);`;
+    
+    db.query(rollsql, params, (err, result)=>{
+        if (err) {
+            console.log(err);
+            return;
+          }
+          console.log(result);
+          allRolls();
+    });
+};
+
+
+function addEmployee(){
+    const params = ['newFirst', 'newLast', null, null];
+    const empsql = `INSERT INTO employees (first_name, last_name, roll_id, manager_id) VALUES (?,?,?,?);`;
+    
+    db.query(empsql, params, (err, result)=>{
+        if (err) {
+            console.log(err);
+            return;
+          }
+          console.log(result);
+          allEmployees();
+    });
+};
+
+// addEmployee();
+// addRoll();
 // addDept();
 // allEmployees();
 // allRolls();
