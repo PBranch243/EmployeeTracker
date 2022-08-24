@@ -22,11 +22,11 @@ const db = mysql.createConnection(
 );
 
 //   database calls here
-const employeeQuery = `SELECT employees.id, employees.first_name, employees.last_name, roll.salary, roll.title, department.name AS department, employees.manager_id
+function allEmployees() {
+    const employeeQuery = `SELECT employees.id, employees.first_name, employees.last_name, roll.salary, roll.title, department.name AS department, employees.manager_id
 FROM employees
 LEFT JOIN roll ON employees.roll_id = roll.id
 LEFT JOIN department ON roll.department_id = department.id;`
-function allEmployees() {
     db.query(employeeQuery, (err, rows) => {
         if (err) {
             console.log(err);
@@ -37,7 +37,21 @@ function allEmployees() {
 
 };
 
-allEmployees();
+function allRolls(){
+    const rollQuery= `SELECT roll.id, roll.title, department.name AS department, roll.salary
+    FROM roll
+    LEFT JOIN department ON roll.department_id = department.id;`;
+    db.query(rollQuery, (err,rows)=>{
+        if (err) {
+            console.log(err);
+        }
+        // console.log(`query OK`);
+        console.table(rows);
+    });
+};
+
+// allEmployees();
+allRolls();
 
 // start the server
 app.listen(PORT, () => {
