@@ -50,8 +50,20 @@ function allRolls(){
     });
 };
 
+function allDept(){
+    const deptQuery= `SELECT * FROM department;`;
+    db.query(deptQuery, (err,rows)=>{
+        if (err) {
+            console.log(err);
+        }
+        // console.log(`query OK`);
+        console.table(rows);
+    });
+};
+
 // allEmployees();
-allRolls();
+// allRolls();
+// allDept();
 
 // start the server
 app.listen(PORT, () => {
