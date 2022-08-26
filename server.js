@@ -49,6 +49,7 @@ function allRolls() {
         }
         // console.log(`query OK`);
         console.table(rows);
+        start();
     });
 };
 
@@ -111,7 +112,7 @@ function addEmployee() {
             message: 'What is the employee role(enter a number)?'
         },
         {
-            type: 'input',
+            type: 'number',
             name: 'manager_id',
             message: 'Please enter the employee managers id(if manager, enter 0)?'
         }
@@ -131,23 +132,31 @@ function addEmployee() {
             start();
         });
 
-    function updateEmployeeRoll() {
-        const sql = `UPDATE employees SET roll_id = ? 
-               WHERE id = ?`;
-        const params = [1, 6];
-        db.query(sql, params, (err, result) => {
-            if (err) {
-                console.log(err);
-                return;
-            }
-            console.log(result);
-            allEmployees();
-        });
-    };
+
 };
+
+
+
+
+function updateEmployeeRoll() {
+    const sql = `UPDATE employees SET roll_id = ? 
+           WHERE id = ?`;
+    const params = [1, 6];
+    db.query(sql, params, (err, result) => {
+        if (err) {
+            console.log(err);
+            return;
+        }
+        console.log(result);
+        allEmployees();
+    });
+};
+
 
 // inquirer script
 function start() {
+
+
     inquirer.prompt([
         {
             type: 'list',
@@ -156,40 +165,41 @@ function start() {
             choices: ['1)View All Employees', '2)Add Employee', '3)Update Employee Role', '4)View all Roles', '5)Add Role', '6)View All Departments', '7)Add Department', '8)Exit']
         }])
         .then((answer) => {
-            if (answer = '1)View All Employees') {
-                allEmployees();
-
-            }
-            if (answer = '2)Add Employee') {
-                addEmployee();
-
-            }
-            if (answer = '3)Update Employee Role') {
-                updateEmployeeRoll();
-
-            }
-            if (answer = '4)View all Roles') {
-                allRolls();
-
-            }
-            if (answer = '5)Add Role') {
-                addRoll();
-
-            }
-            if (answer = '6)View All Departments') {
-                allDept();
-
-            }
-            if (answer = '7)Add Department') {
-                addDept();
-
-            }
-            if (answer = '8)Exit') {
-                console.log(`Goodbye`);
-                return;
-            }
-
+            choice = answer;
         });
+
+        console.log(choice);
+
+    // if (choice = '8)Exit') {
+    //     console.log(`Goodbye`);
+    //     return;
+    // }
+    // else if (choice = '1)View All Employees') {
+    //     allEmployees();
+    // }
+    // else if (choice = '2)Add Employee') {
+    //     addEmployee();
+    // }
+    // else if (choice = '3)Update Employee Role') {
+    //     updateEmployeeRoll();
+
+    // }
+    // else if (choice = '4)View all Roles') {
+    //     allRolls();
+
+    // }
+    // else if (choice = '5)Add Role') {
+    //     addRoll();
+
+    // }
+    // else if (choice = '6)View All Departments') {
+    //     allDept();
+
+    // }
+    // else if (choice = '7)Add Department') {
+    //     addDept();
+
+    // }
 };
 
 
@@ -206,3 +216,4 @@ start();
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
+
