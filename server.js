@@ -22,26 +22,6 @@ const db = mysql.createConnection(
     console.log('Connected to the company database.')
 );
 
-// inquirer script
-function start() {
-    inquirer.prompt([
-        {
-            type: 'list',
-            name: 'choice',
-            message: 'What would you like to do?',
-            choices: ['1)View All Employees', '2)Add Employee', '3)Update Employee Role', '4)View all Roles', '5)Add Role', '6)View All Departments', '7)Add Department', '8)Exit']
-        }])
-        .then((answer)=>{
-            if(answer === '1)View All Employees'){
-                allEmployees();
-            }
-            if (answer === '8)Exit'){
-                console.log(`Goodbye`);
-            }
-            
-        });
-
-};
 
 //   database calls here
 function allEmployees() {
@@ -114,43 +94,92 @@ function addRoll() {
 
 
 function addEmployee() {
-    const params = ['newFirst', 'newLast', null, null];
+    
     const empsql = `INSERT INTO employees (first_name, last_name, roll_id, manager_id) VALUES (?,?,?,?);`;
-
-    db.query(empsql, params, (err, result) => {
-        if (err) {
-            console.log(err);
-            return;
+    inquirer.prompt([
+        {
+            type: 'input',
+            name: 'first_name',
+            message: 'What is the employees first name?'
+        },
+        {
+            type: 'input',
+            name: 'last_name',
+            message: 'What is the employees last name?'
+        },
+        {
+            type: 'input',
+            name: 'roll_id',
+            message: 'What is the employee role(enter a number)?'
+        },
+        {
+            type: 'input',
+            name: 'manager_id',
+            message: 'Please enter the employee managers id(leave blank if manager)?'
         }
-        console.log(result);
-        allEmployees();
-    });
-};
+    ])
+        .then((answers) => {
+            db.query(empsql, answers, (err, result) => {
+                if (err) {
+                    console.log(err);
+                    return;
+                }
+                console.log(result);
+                allEmployees();
+            });
+        });
 
-function updateEmployeeRoll() {
-    const sql = `UPDATE employees SET roll_id = ? 
+    function updateEmployeeRoll() {
+        const sql = `UPDATE employees SET roll_id = ? 
                WHERE id = ?`;
-    const params = [1, 6];
-    db.query(sql, params, (err, result) => {
-        if (err) {
-            console.log(err);
-            return;
-        }
-        console.log(result);
-        allEmployees();
-    });
+        const params = [1, 6];
+        db.query(sql, params, (err, result) => {
+            if (err) {
+                console.log(err);
+                return;
+            }
+            console.log(result);
+            allEmployees();
+        });
+    };
 };
 
-start();
-// updateEmployeeRoll();
-// addEmployee();
-// addRoll();
-// addDept();
-// allEmployees();
-// allRolls();
-// allDept();
+// inquirer script
+function start() {
+    inquirer.prompt([
+        {
+            type: 'list',
+            name: 'choice',
+            message: 'What would you like to do?',
+            choices: ['1)View All Employees', '2)Add Employee', '3)Update Employee Role', '4)View all Roles', '5)Add Role', '6)View All Departments', '7)Add Department', '8)Exit']
+        }])
+        .then((answer) => {
+            if (answer === '1)View All Employees') {
+                allEmployees();
+            }
+            if (answer === '2)Add Employee') {
+                addEmployee();
+            }
+            if (answer === '8)Exit') {
+                console.log(`Goodbye`);
+                return;
+            }
 
-// start the server
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-});
+        });
+
+};
+
+
+    start();
+    // updateEmployeeRoll();
+    // addEmployee();
+    // addRoll();
+    // addDept();
+    // allEmployees();
+    // allRolls();
+    // allDept();
+
+    // start the server
+    app.listen(PORT, () => {
+        console.log(`Server running on port ${PORT}`);
+    });
