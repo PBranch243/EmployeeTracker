@@ -94,8 +94,8 @@ function addRoll() {
 
 
 function addEmployee() {
-    
-    const empsql = `INSERT INTO employees (first_name, last_name, roll_id, manager_id) VALUES (?,?,?,?);`;
+
+
     inquirer.prompt([
         {
             type: 'input',
@@ -119,6 +119,8 @@ function addEmployee() {
         }
     ])
         .then((answers) => {
+            // fix this
+            const empsql = `INSERT INTO employees (first_name, last_name, roll_id, manager_id) VALUES (${answers.first_name}, ${answers.last_name}, ${answers.roll_id}, ${answers.manager_id});`;
             db.query(empsql, answers, (err, result) => {
                 if (err) {
                     console.log(err);
@@ -154,32 +156,47 @@ function start() {
             choices: ['1)View All Employees', '2)Add Employee', '3)Update Employee Role', '4)View all Roles', '5)Add Role', '6)View All Departments', '7)Add Department', '8)Exit']
         }])
         .then((answer) => {
-            if (answer === '1)View All Employees') {
+            if (answer = '1)View All Employees') {
                 allEmployees();
             }
-            if (answer === '2)Add Employee') {
+            if (answer = '2)Add Employee') {
                 addEmployee();
             }
-            if (answer === '8)Exit') {
+            if (answer = '3)Update Employee Role') {
+                updateEmployeeRoll();
+            }
+            if (answer = '4)View all Roles') {
+                allRolls();
+            }
+            if (answer = '5)Add Role'){
+                addRoll();
+            }
+            if (answer = '6)View All Departments'){
+                allDept();
+            }
+            if (answer = '7)Add Department'){
+                addDept();
+            }
+            if (answer = '8)Exit') {
                 console.log(`Goodbye`);
                 return;
             }
 
         });
-
+    start();
 };
 
 
-    start();
-    // updateEmployeeRoll();
-    // addEmployee();
-    // addRoll();
-    // addDept();
-    // allEmployees();
-    // allRolls();
-    // allDept();
+start();
+// updateEmployeeRoll();
+// addEmployee();
+// addRoll();
+// addDept();
+// allEmployees();
+// allRolls();
+// allDept();
 
-    // start the server
-    app.listen(PORT, () => {
-        console.log(`Server running on port ${PORT}`);
-    });
+// start the server
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+});
