@@ -36,7 +36,7 @@ LEFT JOIN department ON roll.department_id = department.id;`
         // console.log(`query OK`);
         console.table(rows);
     });
-
+    start();
 };
 
 function allRolls() {
@@ -94,8 +94,6 @@ function addRoll() {
 
 
 function addEmployee() {
-
-
     inquirer.prompt([
         {
             type: 'input',
@@ -115,20 +113,22 @@ function addEmployee() {
         {
             type: 'input',
             name: 'manager_id',
-            message: 'Please enter the employee managers id(leave blank if manager)?'
+            message: 'Please enter the employee managers id(if manager, enter 0)?'
         }
     ])
         .then((answers) => {
-            // fix this
-            const empsql = `INSERT INTO employees (first_name, last_name, roll_id, manager_id) VALUES (${answers.first_name}, ${answers.last_name}, ${answers.roll_id}, ${answers.manager_id});`;
-            db.query(empsql, answers, (err, result) => {
+
+            const params = [answers.first_name, answers.last_name, answers.roll_id, answers.manager_id];
+            const empsql = `INSERT INTO employees (first_name, last_name, roll_id, manager_id) VALUES (?,?,?,?);`;
+            db.query(empsql, params, (err, result) => {
                 if (err) {
                     console.log(err);
                     return;
                 }
-                console.log(result);
+                // console.log(result);
                 allEmployees();
             });
+            start();
         });
 
     function updateEmployeeRoll() {
@@ -158,24 +158,31 @@ function start() {
         .then((answer) => {
             if (answer = '1)View All Employees') {
                 allEmployees();
+
             }
             if (answer = '2)Add Employee') {
                 addEmployee();
+
             }
             if (answer = '3)Update Employee Role') {
                 updateEmployeeRoll();
+
             }
             if (answer = '4)View all Roles') {
                 allRolls();
+
             }
-            if (answer = '5)Add Role'){
+            if (answer = '5)Add Role') {
                 addRoll();
+
             }
-            if (answer = '6)View All Departments'){
+            if (answer = '6)View All Departments') {
                 allDept();
+
             }
-            if (answer = '7)Add Department'){
+            if (answer = '7)Add Department') {
                 addDept();
+
             }
             if (answer = '8)Exit') {
                 console.log(`Goodbye`);
@@ -183,7 +190,6 @@ function start() {
             }
 
         });
-    start();
 };
 
 
