@@ -2,6 +2,7 @@
 const inquirer = require("inquirer");
 const express = require('express');
 const mysql = require('mysql2');
+let choice;
 // designate port and assign express() to the app
 const PORT = process.env.PORT || 3001;
 const app = express();
@@ -35,8 +36,9 @@ LEFT JOIN department ON roll.department_id = department.id;`
         }
         // console.log(`query OK`);
         console.table(rows);
+        return start();
     });
-    start();
+    
 };
 
 function allRolls() {
@@ -128,8 +130,9 @@ function addEmployee() {
                 }
                 // console.log(result);
                 allEmployees();
+                // start();
             });
-            start();
+            
         });
 
 
@@ -157,49 +160,52 @@ function updateEmployeeRoll() {
 function start() {
 
 
-    inquirer.prompt([
+    inquirer.prompt(
         {
             type: 'list',
             name: 'choice',
             message: 'What would you like to do?',
             choices: ['1)View All Employees', '2)Add Employee', '3)Update Employee Role', '4)View all Roles', '5)Add Role', '6)View All Departments', '7)Add Department', '8)Exit']
-        }])
+        })
         .then((answer) => {
-            choice = answer;
+            choice = answer.choice;
+            console.log(answer)
+            if (choice == '8)Exit') {
+                console.log(`Goodbye`);
+                return;
+            }
+            else if (choice == '1)View All Employees') {
+                console.log("Hit ME BABy One MORe TiME")
+                return allEmployees();
+            }
+            else if (choice == '2)Add Employee') {
+                return addEmployee();
+            }
+            else if (choice == '3)Update Employee Role') {
+                return updateEmployeeRoll();
+        
+            }
+            else if (choice == '4)View all Roles') {
+                return allRolls();
+        
+            }
+            else if (choice == '5)Add Role') {
+                return addRoll();
+        
+            }
+            else if (choice == '6)View All Departments') {
+                allDept();
+        
+            }
+            else if (choice == '7)Add Department') {
+                return addDept();
+        
+            }
         });
 
-        console.log(choice);
+        // console.log(choice);
+    
 
-    // if (choice = '8)Exit') {
-    //     console.log(`Goodbye`);
-    //     return;
-    // }
-    // else if (choice = '1)View All Employees') {
-    //     allEmployees();
-    // }
-    // else if (choice = '2)Add Employee') {
-    //     addEmployee();
-    // }
-    // else if (choice = '3)Update Employee Role') {
-    //     updateEmployeeRoll();
-
-    // }
-    // else if (choice = '4)View all Roles') {
-    //     allRolls();
-
-    // }
-    // else if (choice = '5)Add Role') {
-    //     addRoll();
-
-    // }
-    // else if (choice = '6)View All Departments') {
-    //     allDept();
-
-    // }
-    // else if (choice = '7)Add Department') {
-    //     addDept();
-
-    // }
 };
 
 
@@ -212,8 +218,8 @@ start();
 // allRolls();
 // allDept();
 
-// start the server
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-});
+// // start the server
+// app.listen(PORT, () => {
+//     console.log(`Server running on port ${PORT}`);
+// });
 
