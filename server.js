@@ -38,7 +38,7 @@ LEFT JOIN department ON roll.department_id = department.id;`
         console.table(rows);
         return start();
     });
-    
+
 };
 
 function allRolls() {
@@ -51,7 +51,7 @@ function allRolls() {
         }
         // console.log(`query OK`);
         console.table(rows);
-        start();
+        return start();
     });
 };
 
@@ -63,36 +63,68 @@ function allDept() {
         }
         // console.log(`query OK`);
         console.table(rows);
+        return start();
     });
 };
 
 // function to add department.  pass info from inquirer prompt into 'name'
 function addDept() {
-    const name = `newDepartment`;
+    let name;
     const sql = `INSERT INTO department (name) VALUES (?);`;
 
-    db.query(sql, name, (err, result) => {
-        if (err) {
-            console.log(err);
-            return;
+    inquirer.prompt([
+        {
+            type: 'input',
+            name: 'departmentName',
+            message: 'What is the name of the new department?'
         }
-        console.log(result);
-        allDept();
-    });
+    ])
+        .then((answer) => {
+            name = answer.departmentName;
+            db.query(sql, name, (err, result) => {
+                if (err) {
+                    console.log(err);
+                    return;
+                }
+                console.log(result);
+                allDept();
+                return start();
+            });
+        });
 };
 
 function addRoll() {
-    const params = ['newTitle', 1, 5];
+    let params = [];
     const rollsql = `INSERT INTO roll (title, salary, department_id) VALUES (?,?,?);`;
-
-    db.query(rollsql, params, (err, result) => {
-        if (err) {
-            console.log(err);
-            return;
+    inquirer.prompt([
+        {
+            type: 'input',
+            name: 'title',
+            message: 'What is the role title?'
+        },
+        {
+            type: 'input',
+            name: 'salary',
+            message: 'Enter the salary'
+        },
+        {
+            type: 'input',
+            name: 'department_id',
+            message: 'Plase enter the number of the department this role is in'
         }
-        console.log(result);
-        allRolls();
-    });
+    ])
+        .then((answers) => {
+            params = [answers.title, answers.salary, answers.department_id];
+            db.query(rollsql, params, (err, result) => {
+                if (err) {
+                    console.log(err);
+                    return;
+                }
+                console.log(result);
+                allRolls();
+                return start();
+            });
+        });
 };
 
 
@@ -128,11 +160,11 @@ function addEmployee() {
                     console.log(err);
                     return;
                 }
-                // console.log(result);
+                console.log(result);
                 allEmployees();
-                // start();
+                return start();
             });
-            
+
         });
 
 
@@ -143,16 +175,32 @@ function addEmployee() {
 
 function updateEmployeeRoll() {
     const sql = `UPDATE employees SET roll_id = ? 
-           WHERE id = ?`;
-    const params = [1, 6];
-    db.query(sql, params, (err, result) => {
-        if (err) {
-            console.log(err);
-            return;
+    WHERE id = ?`;
+    let params = [];
+    inquirer.prompt([
+        {
+            type: 'input',
+            name: 'employee_id',
+            message: 'Enter the employee id you want to update.'
+        },
+        {
+            type: 'input',
+            name: 'newRoll',
+            message: 'Enter the code for the employees new roll'
         }
-        console.log(result);
-        allEmployees();
-    });
+    ])
+        .then((answers) => {
+            params = [answers.newRoll, answers.employee_id]
+            db.query(sql, params, (err, result) => {
+                if (err) {
+                    console.log(err);
+                    return;
+                }
+                console.log(result);
+                allEmployees();
+                return start();
+            });
+        });
 };
 
 
@@ -183,43 +231,26 @@ function start() {
             }
             else if (choice == '3)Update Employee Role') {
                 return updateEmployeeRoll();
-        
+
             }
             else if (choice == '4)View all Roles') {
                 return allRolls();
-        
+
             }
             else if (choice == '5)Add Role') {
                 return addRoll();
-        
+
             }
             else if (choice == '6)View All Departments') {
                 allDept();
-        
+
             }
             else if (choice == '7)Add Department') {
                 return addDept();
-        
+
             }
         });
-
-        // console.log(choice);
-    
-
 };
 
 
 start();
-// updateEmployeeRoll();
-// addEmployee();
-// addRoll();
-// addDept();
-// allEmployees();
-// allRolls();
-// allDept();
-
-// // start the server
-// app.listen(PORT, () => {
-//     console.log(`Server running on port ${PORT}`);
-// });
-
